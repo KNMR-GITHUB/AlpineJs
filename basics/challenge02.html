@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Challenge01</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="app.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body>
+    <div x-data="{text: null, bg: null, id: null}">
+        <button x-text="text" :id="id" :style="{backgroundColor: bg}" class="bg-gray-300 w-10 h-5"></button>
+        <input type="text" x-model="text" placeholder="text">
+        <input type="text" x-model="bg" placeholder="background color">
+        <input type="text" x-model="id" placeholder="id">
+    </div>
+</body>
+</html>

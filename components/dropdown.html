@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Components</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="app.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="bg-gray-300">
+
+    <!-- dropdown -->
+    <div x-data="{open:false}" class="my-4">
+        <button type="button" @click="open = !open" class="px-2 py-1 bg-purple-500 text-white rounded-md hover:bg-opacity-60 shadow">
+            Dropdown
+        </button>
+
+        <ul x-show="open" @click.outside="open = false" x-transition class="bg-blue-200 w-24 py-1">
+            <li class="text-gray-700 hover:bg-blue-400 px-2 block">View</li>
+            <li class="text-gray-700 hover:bg-blue-400 px-2 block">Edit</li>
+            <li class="text-gray-700 hover:bg-blue-400 px-2 block">Delete</li>
+        </ul>
+    </div>
+
+    <!-- modal -->
+    <div x-data="{modal: false}" class="my-4">
+        <button type="button" @click="modal = true" class="px-2 py-1 bg-purple-500 text-white rounded-md hover:bg-opacity-60 shadow">Modal</button>
+        <!-- background -->
+        <div x-show="modal" class="fixed left-0 top-0 bottom-0 right-0 z-10 bg-black/30 flex justify-center items-center" >
+            <!-- content -->
+            <div @click.outside="modal=false" class="w-1/2 bg-white">
+                <div class="flex justify-between">
+                    <div class="px-3"></div>
+                    <div>Modal Title</div>
+                    <div class="bg-red-400 text-white hover:bg-red-600 hover:cursor-pointer px-2" @click="modal=false">X</div>
+                </div>
+                Modal Content
+            </div>
+        </div>
+    </div>
+
+    <!-- tabs -->
+    <div x-data="{
+            tabs:['Home', 'Users', 'Settings'],
+            activeTab: 'Home'
+            }" class="my-4">
+        <div class="flex">
+            <template x-for="tab in tabs">
+                <div @click="activeTab = tab" x-text="tab" class="py-1 px-2 bg-white border hover:bg-gray-100 hover:cursor-pointer" :class="{'bg-gray-100 border-blue-300': activeTab === tab}"></div>
+            </template>
+        </div>
+        <div class="py-2 px-3 bg-white w-fit">
+            <div x-show="activeTab=='Home'">
+                Home
+            </div>
+            <div x-show="activeTab=='Users'">
+                Users
+            </div>
+            <div x-show="activeTab=='Settings'"> 
+                Settings
+            </div>
+        </div>
+    </div>
+
+    <!-- carousals -->
+    <div x-data="{
+            images:['images/pexels-annelies-brouw-14774843.jpg','images/pexels-beyza-nur-aytop-20766853.jpg',
+            'images/pexels-borja-lopez-3912838.jpg', 'images/pexels-erik-schereder-4788287.jpg', 'images/pexels-huyen-le-thanh-20727469.jpg',
+            'images/pexels-kristaps-ungurs-19845819.jpg', 'images/pexels-mathias-reding-17719829.jpg', 'images/pexels-michael-li-20755698.jpg', 
+            'images/pexels-mikkel-kvist-16039120.jpg', 'images/pexels-tetyana-kovyrina-19908788.jpg', 'images/pexels-vista-ireland-5221588.jpg'],
+            activeImage: null,
+            counter: 0,
+            init(){
+                this.activeImage = this.images[this.counter]
+            },
+            update(){
+                this.activeImage = this.images[this.counter]
+            }
+        }">
+        <!-- main image -->
+        <div class="flex justify-center">
+            <!-- left arrow -->
+            <div class="flex items-center hover:bg-gray-400" :class="{'hidden':counter==0}" @click="counter-=1; update()">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                </svg>
+            </div>
+            
+            <!-- main image -->
+            <img :src="activeImage" class="w-1/2 h-[300px] object-contain" alt="">
+
+            <!-- right arrow -->
+            <div class="flex items-center hover:bg-gray-400" :class="{'hidden':counter==10}" @click="counter+=1; update() ">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                </svg>
+            </div>
+            
+              
+        </div>
+    </div>
+    
+</body>
+</html>

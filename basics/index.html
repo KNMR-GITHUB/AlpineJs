@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alpine.js Basics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="app.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+</head>
+<body>
+
+    <!-- x-data,x-text,x-html -->
+    <div class="mt-2 border-t border-black" x-data="{name:'Katsura',message:'hello <b>World</b>'}">
+        <p x-text="name"></p>
+        <p x-html="message"></p>
+    </div>
+
+    <!-- x-data with methods -->
+    <div class="mt-2 border-t border-black" x-data="{
+            message: 'click to change',
+            change(){
+                this.message = 'Hhah h?'
+            }
+        }" class="bg-blue-300">
+
+        <span x-text="message" @click="change()" class="bg-green-400 w-fit px-2 text-white hover:bg-red-300 hover:cursor-pointer"></span>
+
+    </div>
+
+
+    <!-- re-usable data starts -->
+
+        <!-- dropdown button calling dropdown, that is defined in app.js, it has a function 'toggle()' -->
+        <div class="mt-2 border-t border-black" x-data="dropdown">
+            <button @click="toggle()" class="bg-teal-500 text-white w-fit rounded-md border border-teal-700 px-2 my-2 hover:bg-green-500">Open/Close</button>
+            <div x-show="open">
+                content...
+            </div>
+        </div>
+        <div x-data="dropdown">
+            <button @click="toggle()" class="bg-teal-500 text-white w-fit rounded-md border border-teal-700 px-2 my-2 hover:bg-green-500">Open/Close</button>
+            <div x-show="open">
+                content...
+            </div>
+        </div>
+
+    <!-- re-usable data ends -->
+
+    <!-- data-less components -->
+    <div x-data class="mt-2 border-t border-black" @click="alert('That thing')" class="bg-purple-400 w-fit px-2 my-2 rounded-md text-white">
+        click
+    </div>
+
+    <!-- store or storage -->
+    <div x-data x-text="$store.users.username" class="mt-2 border-t border-black">
+
+    </div>
+
+    <!-- x-init -->
+    <div 
+        x-data="{todo: {}}"
+        x-init="todo = await((await fetch('https://jsonplaceholder.typicode.com/todos/1')).json())">
+            <p x-text="todo.title"></p>
+    </div>
+
+    <!-- scope -->
+    <!-- checks current element for 'x', if not present, goes 1 parent element above to check, then again one parent above until it finds 'x', if nothing is found, shows nothing found -->
+    <div x-data="{
+        name: 'Zura',
+        age: 30,
+        gender: 'male'
+    }" class="mt-2 border-t border-black">
+        <div x-data="{name:'John', age: 25}">
+            <div x-data="{name: 'Mary'}">
+                <p x-text="name"></p>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- x-show and x-transition -->
+    <div x-data="{open:false}" class="mt-2 border-t border-black">
+        <button @click="open = ! open" class="text-white bg-red-200 hover:bg-red-400">click here (x-show)</button>
+        <div x-show="open" x-transition class="bg-yellow-400">
+            showing this
+        </div>
+
+    </div>
+
+    <!-- x-if (always need to use it with <template> and cannot use animations as the element is removed and added, everytime we trigger the event) -->    
+    <div x-data="{open:false}" class="mt-2 border-t border-black">
+        <button @click="open = ! open" class="text-white bg-red-200 hover:bg-red-400">click here (x-if)</button>
+        <template x-if="open">
+            <div class="bg-yellow-400">
+                showing this
+            </div>
+        </template>
+        
+
+    </div>
+
+    <!-- x-for (always need to be used with <template>) -->
+    <div x-data="{
+            list: [{id:1,name:'henlo'}, {id:2,name:'bai'}]
+        }" class="mt-2 border-t border-black p-2">
+        <p class="bg-violet-400">retrieving data using loop</p>
+        <template x-for="items in list">
+            <p x-text="'id: ' + items.id + ' name: '  +items.name ">
+                
+            </p>
+        </template>
+    </div>
+
+    <!-- x-bind: class (to bind/add/remove classes to an element when certain events are triggered) -->
+    <!-- shorthand, :class -->
+    <div x-data="{click: false}" class="mt-2 border-t border-black p-2">
+        <button x-bind:class="click ? 'bg-green-400 text-green-200' : '' " @click="click = !click" class="bg-blue-400 text-white">
+            click here (x-bind: class)
+        </button>
+    </div>
+
+    <!-- x-bind: id -->
+    <!-- similar to x-bind:class, it binds or adds an id to an element when certain events are triggered -->
+
+
+    <!-- x-on -->
+    <!-- click,keyup,debounce,outside etc, look at documentation -->
+
+</body>
+</html>
