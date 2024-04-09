@@ -62,7 +62,7 @@
         </div>
     </div>
 
-    <!-- carousals -->
+ 
     <div x-data="{
             images:['images/pexels-annelies-brouw-14774843.jpg','images/pexels-beyza-nur-aytop-20766853.jpg',
             'images/pexels-borja-lopez-3912838.jpg', 'images/pexels-erik-schereder-4788287.jpg', 'images/pexels-huyen-le-thanh-20727469.jpg',
@@ -73,45 +73,32 @@
             
             init(){
                 this.activeImage1 = this.images[this.counter]
-                this.activeImage2 = this.images[this.counter+1]
-                this.activeImage3 = this.images[this.counter+2]
             },
             update(){
                 if (this.counter > this.length) return;
                 this.activeImage1 = this.images[this.counter]
-                this.activeImage2 = this.images[this.counter+1]
-                this.activeImage3 = this.images[this.counter+2]
             },
             
 
         }"
         x-init="length = images.length">
-        <!-- main image -->
+
         <div class="flex justify-center">
-            <!-- left arrow -->
-            <div class="flex items-center hover:bg-gray-400" :class="{'hidden':counter==0}" @click="counter-=3; update()">
+
+            <div class="flex items-center hover:bg-gray-400" :class="{'hidden':counter==0}" @click="counter-=1; update()">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
                 </svg>
             </div>
             
-            <!-- main image -->
+ 
             <div class="gap-2 flex p-2 bg-white"> 
                 <img :src="activeImage1" class="w-[450px] h-[300px] object-contain bg-black bg-opacity-30" alt="">
-                <template x-if="counter +1 < length">
-                    <img :src="activeImage2" class="w-[450px] h-[300px] object-contain bg-black bg-opacity-30" alt="">
-                </template>
-
-                <template x-if="counter + 2 < length">
-                    <img :src="activeImage3" class="w-[450px] h-[300px] object-contain bg-black bg-opacity-30" alt="">
-                </template>
-                
-                
             </div>
             
 
-            <!-- right arrow -->
-            <div class="flex items-center hover:bg-gray-400" :class="{'hidden':counter==9}" @click="counter+=3; update() ">
+
+            <div class="flex items-center hover:bg-gray-400" :class="{'hidden':counter==9}" @click="counter+=1; update() ">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
                 </svg>
@@ -120,6 +107,67 @@
               
         </div>
     </div>
+
+
+
+<div x-data="{
+    images:['images/pexels-annelies-brouw-14774843.jpg','images/pexels-beyza-nur-aytop-20766853.jpg',
+    'images/pexels-borja-lopez-3912838.jpg', 'images/pexels-erik-schereder-4788287.jpg', 'images/pexels-huyen-le-thanh-20727469.jpg',
+    'images/pexels-kristaps-ungurs-19845819.jpg', 'images/pexels-mathias-reding-17719829.jpg', 'images/pexels-michael-li-20755698.jpg', 
+    'images/pexels-mikkel-kvist-16039120.jpg', 'images/pexels-tetyana-kovyrina-19908788.jpg', 'images/pexels-vista-ireland-5221588.jpg'],
+    translateX: 0,
+    imageWidth: 450, // Adjust based on your image width
+    interval: null,
+    init() {
+        this.interval = setInterval(() => {
+            this.scrollRight();
+        }, 3000); // Adjust based on your desired interval
+    },
+    scrollRight() {
+        this.translateX -= this.imageWidth;
+        // Check if reached the end of the carousel
+        if (Math.abs(this.translateX) >= this.imageWidth * this.images.length) {
+            // Move first image to the end seamlessly
+            this.translateX += this.imageWidth * this.images.length;
+        }
+    },
+    scrollLeft() {
+        this.translateX += this.imageWidth;
+        // Check if reached the beginning of the carousel
+        if (this.translateX > 0) {
+            // Move last image to the beginning seamlessly
+            this.translateX -= this.imageWidth * this.images.length;
+        }
+    },
+    stopAutoScroll() {
+        clearInterval(this.interval);
+    }
+}">
+    <div class="relative overflow-hidden">
+        <div class="flex transition-transform duration-300 ease-in-out" :style="'transform: translateX(' + translateX + 'px)'">
+            <template x-for="(image, index) in images" :key="index">
+                <img :src="image" class="w-[450px] h-[300px] object-cover" alt="Carousel Image">
+            </template>
+        </div>
+        <div class="absolute top-0 bottom-0 left-0 w-1/2  pointer-events-none"></div>
+        <div class="absolute top-0 bottom-0 right-0 w-1/2 pointer-events-none"></div>
+        <div class="absolute top-1/2 transform -translate-y-1/2 left-0 z-10 flex items-center hover:bg-gray-400 cursor-pointer" @click="scrollLeft(); stopAutoScroll()">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+            </svg>
+        </div>
+        <div class="absolute top-1/2 transform -translate-y-1/2 right-0 z-10 flex items-center hover:bg-gray-400 cursor-pointer" @click="scrollRight(); stopAutoScroll()">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+            </svg>
+        </div>
+    </div>
+</div>
+
+
+
     
 </body>
 </html>
